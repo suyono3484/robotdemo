@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx jest",
-    "build": "npx tsc"
+    "coverage": "npx jest --coverage",
+    "build": "npx tsc",
+    "robot": "node dist/index.js"
   },
   "keywords": [],
   "author": "",

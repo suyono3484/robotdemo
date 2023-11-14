@@ -1,7 +1,6 @@
 import {Direction, NoSuchFileError, RobotInterface} from "../types";
 import * as readline from "node:readline";
 import * as fs from "node:fs";
-import * as process from "node:process";
 
 
 enum Command {
@@ -51,6 +50,10 @@ export class Terminal {
                 // output: process.stdout
             })
         }
+
+        process.on('SIGINT', () => {
+            rl.close();
+        })
 
         rl.on('line', (command) => {
             let upCmd = command.toUpperCase();
