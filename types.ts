@@ -1,5 +1,3 @@
-import {Dir} from "fs";
-
 export enum Direction {
     NORTH = "NORTH",
     EAST = "EAST",
@@ -18,7 +16,8 @@ export interface RobotInterface {
     Move(): void
     Left(): void
     Right(): void
-    Report(): Report
+    Report(): Report | false
+    isOnTheTable(): boolean
 }
 
 export class OutOfBoundError extends Error {
@@ -28,4 +27,23 @@ export class OutOfBoundError extends Error {
         // we are extending a built-in class
         Object.setPrototypeOf(this, OutOfBoundError.prototype);
     }
+}
+
+export class InvalidBoardSizeError extends Error {
+    constructor(message: string) {
+        super(message);
+
+        // we are extending a built-in class
+        Object.setPrototypeOf(this, InvalidBoardSizeError.prototype);
+    }
+}
+
+export class NoSuchFileError extends Error {
+    constructor(message: string) {
+        super(message);
+
+        // we are extending a built-in class
+        Object.setPrototypeOf(this, NoSuchFileError.prototype);
+    }
+
 }

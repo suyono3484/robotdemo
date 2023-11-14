@@ -1,18 +1,26 @@
-import {Direction, OutOfBoundError, Report, RobotInterface} from "../types";
+import {Direction, InvalidBoardSizeError, OutOfBoundError, Report, RobotInterface} from "../types";
 
 export class Robot implements RobotInterface{
-    private readonly spaceX: number = 0;
-    private readonly spaceY: number = 0;
+    private readonly spaceX: number;
+    private readonly spaceY: number;
     private x: number = -1;
     private y: number = -1;
     private f: Direction = Direction.NORTH;
 
     constructor(spaceX: number, spaceY: number) {
+        if (spaceX <= 0 || spaceY <= 0) {
+            throw new InvalidBoardSizeError('minimum board size is 1 x 1')
+        }
+
         this.spaceX = spaceX;
         this.spaceY = spaceY;
     }
 
     Left(): void {
+        if (!this.isOnTheTable()) {
+            return;
+        }
+
         switch (this.f) {
             case Direction.NORTH:
                 this.f = Direction.WEST;
@@ -29,10 +37,14 @@ export class Robot implements RobotInterface{
         }
     }
 
+    isOnTheTable(): boolean {
+        return this.x >= 0 && this.y >= 0;
+    }
+
     private setLocation(x: number, y: number): void {
         if (x < 0 || x > this.spaceX - 1 ||
             y < 0 || y > this.spaceY - 1) {
-            throw new OutOfBoundError("location " + x + ", " + y + " is out of bound");
+            throw new OutOfBoundError(`location ${x}, ${y} is out of bound`);
         }
 
         this.x = x;
@@ -40,6 +52,10 @@ export class Robot implements RobotInterface{
     }
 
     Move(): void {
+        if (!this.isOnTheTable()) {
+            return;
+        }
+
         switch (this.f) {
             case Direction.NORTH:
                 this.setLocation(this.x, this.y + 1);
@@ -61,7 +77,11 @@ export class Robot implements RobotInterface{
         this.f = f;
     }
 
-    Report(): Report {
+    Report(): Report | false {
+        if (!this.isOnTheTable()) {
+            return false
+        }
+
         return {
             x: this.x,
             y: this.y,
@@ -70,6 +90,10 @@ export class Robot implements RobotInterface{
     }
 
     Right(): void {
+        if (!this.isOnTheTable()) {
+            return;
+        }
+
         switch (this.f) {
             case Direction.NORTH:
                 this.f = Direction.EAST;
